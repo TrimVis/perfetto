@@ -70,6 +70,41 @@ export class FlowEventsController extends Controller<'main'> {
          end
          from slice where id=$slice_id'
     );`);
+
+    // Initialize allFlows list, this is likely the wrong location to do so
+    // but it works 🤷
+    this.queryFlowEvents(`
+    select
+      f.slice_out as beginSliceId,
+      t1.track_id as beginTrackId,
+      t1.name as beginSliceName,
+      CHROME_CUSTOM_SLICE_NAME(t1.slice_id) as beginSliceChromeCustomName,
+      t1.category as beginSliceCategory,
+      t1.ts as beginSliceStartTs,
+      (t1.ts+t1.dur) as beginSliceEndTs,
+      t1.depth as beginDepth,
+      NULL as beginThreadName,
+      NULL as beginProcessName,
+      f.slice_in as endSliceId,
+      t2.track_id as endTrackId,
+      t2.name as endSliceName,
+      CHROME_CUSTOM_SLICE_NAME(t2.slice_id) as endSliceChromeCustomName,
+      t2.category as endSliceCategory,
+      t2.ts as endSliceStartTs,
+      (t2.ts+t2.dur) as endSliceEndTs,
+      t2.depth as endDepth,
+      NULL as endThreadName,
+      NULL as endProcessName,
+      extract_arg(f.arg_set_id, 'cat') as category,
+      extract_arg(f.arg_set_id, 'name') as name,
+      f.id as id,
+      slice_is_ancestor(t1.slice_id, t2.slice_id) as flowToDescendant
+    from flow f
+    join slice t1 on f.slice_out = t1.slice_id
+    join slice t2 on f.slice_in = t2.slice_id
+    `, (flows: Flow[]) => {
+      globals.allFlows = flows;
+    });
   }
 
   async queryFlowEvents(query: string, callback: (flows: Flow[]) => void) {
@@ -305,6 +340,7 @@ export class FlowEventsController extends Controller<'main'> {
     callback(flows);
   }
 
+
   sliceSelected(sliceId: number) {
     if (this.lastSelectedKind === 'CHROME_SLICE' &&
         this.lastSelectedSliceId === sliceId) {
@@ -435,8 +471,10 @@ export class FlowEventsController extends Controller<'main'> {
     this.queryFlowEvents(query, (flows: Flow[]) => publishSelectedFlows(flows));
   }
 
+
   refreshVisibleFlows() {
     const selection = globals.state.currentSelection;
+
     if (!selection) {
       this.lastSelectedKind = 'NONE';
       publishConnectedFlows([]);

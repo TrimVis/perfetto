@@ -574,6 +574,9 @@ export interface State {
   // Show the sidebar extended
   sidebarVisible: boolean;
 
+  // Show all flows (even without selection)
+  showAllFlows: boolean;
+
   // Hovered and focused events
   hoveredUtid: number;
   hoveredPid: number;

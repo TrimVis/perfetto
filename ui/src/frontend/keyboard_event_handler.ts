@@ -101,6 +101,10 @@ export function handleKey(e: KeyboardEvent, down: boolean): boolean {
     moveByFocusedFlow('Backward');
     return true;
   }
+  if (down && 'a' === key && e.shiftKey) {
+    globals.dispatch( Actions.toggleShowAllFlows({}));
+    return true;
+  }
   return false;
 }
 

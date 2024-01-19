@@ -261,6 +261,7 @@ class Globals {
   private _threadMap?: ThreadMap = undefined;
   private _sliceDetails?: SliceDetails = undefined;
   private _threadStateDetails?: ThreadStateDetails = undefined;
+  private _allFlows?: Flow[] = undefined;
   private _connectedFlows?: Flow[] = undefined;
   private _selectedFlows?: Flow[] = undefined;
   private _visibleFlowCategories?: Map<string, boolean> = undefined;
@@ -336,6 +337,7 @@ class Globals {
     this._aggregateDataStore = new Map<string, AggregateData>();
     this._threadMap = new Map<number, ThreadDesc>();
     this._sliceDetails = {};
+    this._allFlows = [];
     this._connectedFlows = [];
     this._selectedFlows = [];
     this._visibleFlowCategories = new Map<string, boolean>();
@@ -425,6 +427,14 @@ class Globals {
 
   set threadStateDetails(click: ThreadStateDetails) {
     this._threadStateDetails = assertExists(click);
+  }
+
+  get allFlows() {
+    return assertExists(this._allFlows);
+  }
+
+  set allFlows(allFlows: Flow[]) {
+    this._allFlows = assertExists(allFlows);
   }
 
   get connectedFlows() {

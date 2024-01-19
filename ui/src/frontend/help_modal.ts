@@ -144,6 +144,9 @@ class KeyMappingsHelp implements m.ClassComponent {
         m(
             'table',
             m('tr',
+              m('td', keycap('Shift'), ' + ', keycap('a')),
+              m('td', 'Toggle whether or not to show all flows')),
+            m('tr',
               m('td', keycap('f'), ' (with event selected)'),
               m('td', 'Scroll + zoom to current selection')),
             m('tr',

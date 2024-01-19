@@ -144,6 +144,7 @@ export function createEmptyState(): State {
 
     perfDebug: false,
     sidebarVisible: true,
+    showAllFlows: false,
     hoveredUtid: -1,
     hoveredPid: -1,
     hoverCursorTimestamp: Time.INVALID,

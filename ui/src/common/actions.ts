@@ -200,6 +200,10 @@ export const StateActions = {
     };
   },
 
+  toggleShowAllFlows(state: StateDraft, _: {}) {
+    state.showAllFlows = !state.showAllFlows;
+  },
+
   setTraceUuid(state: StateDraft, args: {traceUuid: string}) {
     state.traceUuid = args.traceUuid;
   },

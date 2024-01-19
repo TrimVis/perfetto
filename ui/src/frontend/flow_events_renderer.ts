@@ -143,6 +143,12 @@ export class FlowEventsRenderer {
     ctx.rect(0, 0, args.canvasWidth - TRACK_SHELL_WIDTH, args.canvasHeight);
     ctx.clip();
 
+    if (globals.state.showAllFlows) {
+      globals.allFlows.forEach((flow) => {
+        this.drawFlow(ctx, args, flow, CONNECTED_FLOW_HUE);
+      });
+    }
+
     globals.connectedFlows.forEach((flow) => {
       this.drawFlow(ctx, args, flow, CONNECTED_FLOW_HUE);
     });
